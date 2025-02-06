@@ -1,0 +1,159 @@
+\documentclass[12pt, oneside]{amsart}
+\usepackage{amsmath}
+\usepackage{lipsum}
+\linespread{1.25}
+\setlength{\topmargin}{0.in}
+\setlength{\oddsidemargin}{0.33in}
+\setlength{\textheight}{9.0in}
+\setlength{\textwidth}{6.0in}
+%-------Packages---------
+\usepackage{amssymb,amsfonts}
+\usepackage[all,arc]{xy}
+\usepackage{enumerate}
+\usepackage{mathrsfs}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{listings}
+\usepackage{appendix}
+\usepackage{listings}
+\usepackage{placeins}
+\usepackage{booktabs}
+
+%--------Theorem Environments--------
+%theoremstyle{plain} --- default
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{quest}[thm]{Question}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{defns}[thm]{Definitions}
+\newtheorem{con}[thm]{Construction}
+\newtheorem{exmp}[thm]{Example}
+\newtheorem{exmps}[thm]{Examples}
+\newtheorem{notn}[thm]{Notation}
+\newtheorem{notns}[thm]{Notations}
+\newtheorem{addm}[thm]{Addendum}
+\newtheorem{exer}[thm]{Exercise}
+
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{rems}[thm]{Remarks}
+\newtheorem{warn}[thm]{Warning}
+\newtheorem{sch}[thm]{Scholium}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\makeatletter
+\let\c@equation\c@thm
+\makeatother
+\numberwithin{equation}{section}
+
+\usepackage[style=apa,sortcites=true,sorting=nyt,backend=biber,natbib=true]{biblatex}
+%bibliographystyle{unsrtnat}
+\addbibresource{Reference/reference.bib}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% your title/author/date information go here
+%--------Meta Data: Fill in your info------
+
+
+\title{On the Variable Selection When Estimating Effects in External Target Populations}
+
+\author{Xuan Li}
+
+\date{December 23, 2024}
+
+\begin{document}
+
+\begin{abstract}
+    This report serves as a qualifying paper for the UBC Statistics PhD program, providing a comprehensive summary of the paper "Variable Selection When Estimating Effects in External Target Populations" \citep{qp}. The original paper introduces .... to estimate causal effects in a target population. Building on this foundation, we explore three extensions: (1)... Through simulations, we demonstrate the strengths and limitations of the Prediction-Powered Causal Inference (PPCI) framework and assess the effectiveness of adaptive strategies in enhancing estimation accuracy while maintaining resource efficiency. These findings contribute to understanding the practical applicability of PPCI framework.
+\end{abstract}
+\maketitle
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%section 1
+
+
+\section{Introduction}
+
+\subsection{Background and Motivation}
+
+Causal inference often requires estimating treatment effects from study populations and generalizing them to target populations. One commonly used measure is the \textbf{risk difference (RD)}, which quantifies the absolute difference in outcome probability between exposed and unexposed groups:
+\begin{equation}
+    RD = P(Y = 1 \mid X = 1) - P(Y = 1 \mid X = 0).
+\end{equation}
+In an ideal scenario, we can estimate RD using a study sample and apply it to a target population. However, differences in covariate distributions between study and target populations can lead to biased estimates.
+
+A key challenge is selecting the appropriate covariates when modeling RD. Effect modifiers (EMMs) influence how the exposure affects the outcome and should generally be included in the model, while non-effect modifiers (non-EMMs) do not interact with the exposure but might still affect outcome prediction. The inclusion of non-EMMs may not introduce bias in RD estimates but could increase their variance. Thus, the trade-off between bias and precision is central to variable selection in external generalization problems.
+
+\subsection{Summary of the Original Paper}
+The paper \textit{``Variable Selection When Estimating Effects in External Target Populations''} examines how covariate selection affects RD estimation when transporting causal effects from a study to a target population. The authors explore different modeling approaches, including \textbf{outcome modeling (OM)} and \textbf{inverse odds weighting (IOW)}, to assess their impact on bias and variance.\\
+
+The authors analyze several modeling strategies, varying which covariates are included, and evaluate the impact on RD estimation. Their key findings include:
+Effect modifiers must be included: Models excluding EMMs lead to biased RD estimates. Non-effect modifiers increase variance but do not introduce bias: Adding non-EMMs to models does not change the expected RD but reduces precision. Inverse odds weighting (IOW) adjusts for population differences: IOW is effective in correcting for differences between study and target populations, provided a correctly specified weighting model is used.
+
+
+\subsection{Simulation and Results}
+The authors considered six covariates $Z$' in the paper, each are different interms of their distribtion among target and study data, wether they affects $Y$ and wether they affects how $X$ influence $Y$ (i.e., Effect Modifiers). 
+The study uses a linear model for $P(Y|X, Z)$ including interaction terms of $X$ and $Z$'s:
+\begin{equation}
+    P(Y = 1) = 0.1 + 0.1 X + 0.1 Z_2 + 0.1 Z_3 + 0.1 Z_5 + 0.1 Z_6 + 0.1 X Z_3 + 0.1 X Z_6.
+\end{equation}
+where $X$represents the treatment/exposure. Note that $Z_3, Z_6$ are \textbf{effect modifiers (EMMs)}, as they interact with $X$ in the DGP. $Z_3$ distributes the same across the study and target population but $Z_6$ distributes differently across the two population. $Z_2, Z_5$ are \textbf{non-effect modifiers (non-EMMs)}, affecting $Y$ but not modifying the effect of $X$. $Z_2$ distributes the same across the study and target population but $Z_5$ distributes differently across the two population. $Z_1$ and $Z_4$ are variables that neither affect $Y$ not affect how $X$ influence $Y$, in a sense of "totally unrelated". $Z_1$ distributes the same across the study and target population but $Z_4$ distributes differently across the two population. \\
+
+
+The authors evaluate different linear model specifications for RD estimation under both \textbf{outcome modeling (OM)} and \textbf{inverse odds weighting (IOW)}. Below is a summary of key models used in their analysis:
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Model} & \textbf{Specification} & \textbf{Covariates Included} \\
+        \midrule
+        \( M_{\text{crude}} \) & Crude Model & \( X \) only \\
+        \( M_1 \) & Non-EMM \( Z_1 \) only & \( X, Z_1 \) \\
+        \( M_3 \) & EMM \( Z_3 \) only & \( X, Z_3 \) \\
+        \( M_{1,6} \) & Non-EMM \( Z_1 \) + EMM \( Z_6 \) & \( X, Z_1, Z_6 \) \\
+        \( M_{\text{full}} \) & Full Model & \( X, Z_1, Z_2, Z_3, Z_4, Z_5, Z_6 \) \\
+        \( M_{\text{int}} \) & True Model (includes interactions) & \( X, Z_3, Z_6, X Z_3, X Z_6 \) \\
+        \bottomrule
+    \end{tabular}
+    \caption{Models Tested in the Paper}
+\end{table}
+Each of these models is applied in both OM and IOW approaches. For Outcome Modeling (OM) approach, linear models are fitted on stratified $X$ in the study data and used to predict RD in the target population. For Inverse Odds Weighting (IOW) approach, linear weights are assigned to account for the different distributions of covariates between study and target populations.\\
+
+
+
+
+\subsection{Limitations of the Study}
+While the authors provide valuable empirical results, their study has several limitations. First, all models they tested are \textbf{misspecified} because none include the interaction terms \( XZ_3 \) and \( XZ_6 \), which are present in the true DGP. This means all RD estimates come from incorrect models, raising the question of whether comparing different misspecified models is meaningful.
+
+Second, the assumption that exposure \(X\) is randomly assigned in the target population may not hold in real-world applications. Typically, exposure is influenced by underlying covariates, which could introduce selection bias not accounted for in their simulation framework.
+
+Finally, the study lacks theoretical derivations of the bias and variance of RD estimators. While empirical findings suggest that including non-EMMs increases variance without introducing bias, a formal mathematical justification would strengthen these conclusions.
+
+\section{Potential Extensions}
+We propose the following extensions to further investigate generalizability issues:
+
+\subsection{1. Non-Random Exposure Assignment in the Target Population}
+
+The original study assumes that the exposure \( X \) follows a Bernoulli(0.5) distribution in both the study and target populations, meaning that individuals in both settings have an equal probability of receiving the treatment or exposure. However, in most real-world applications, exposure assignment is not random but rather influenced by underlying characteristics, such as socioeconomic status, regional healthcare access, or personal health history. For example, in an observational healthcare study, wealthier individuals may have better access to treatment, whereas lower-income individuals may face structural barriers. 
+
+\textbf{Why This Matters:} When exposure assignment mechanisms differ between the study and target populations, standard **inverse odds weighting (IOW)** methods may no longer fully adjust for confounding. If \( X \) is influenced by a **non-effect modifier (non-EMM)** in the target population but not in the study, or vice versa, then bias in RD estimation may persist. Investigating new weighting approaches, such as **stratified IOW** or **machine-learning-based propensity score weighting**, may improve generalizability.
+
+\subsection{2. Assessing Performance When Key Interactions Are Omitted}
+
+The models tested in the paper do not account for interaction terms between \( X \) and effect modifiers (EMMs) such as \( Z_3 \) and \( Z_6 \), even though the **true data-generating process (DGP)** includes such interactions. This means that all fitted models in the study are effectively **misspecified** with respect to the true underlying causal relationship. For example, omitting the interaction \( XZ_3 \) implicitly assumes that \( Z_3 \) affects \( Y \) equally for both exposed (\( X=1 \)) and unexposed (\( X=0 \)) individuals, which may not be valid.
+
+\textbf{Why This Matters:} Including interaction terms is essential when estimating causal effects in the presence of effect modification. Ignoring these terms can lead to **biased RD estimates**. Investigating how interaction effects influence IOW and OM models can provide insights into the robustness of these methods when used in practice. Additionally, evaluating whether alternative methods, such as **doubly robust estimators**, can correct for these biases would be valuable.
+
+\section{Exploration Through Simulation}
+\textbf{(This section will be completed once we run simulations for the proposed extensions.)}
+
+\end{document}
+
+\clearpage
+\printbibliography
+\end{document}
