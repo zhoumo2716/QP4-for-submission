@@ -1,5 +1,5 @@
-# QP3 Project
-Project directory and LaTeX documents for Xuan Li UBC STAT 548 Qualifying Paper report 3. Qualifying Paper is on [Prediction-powered Generalization of Causal Inferences](https://arxiv.org/abs/2406.02873). 
+# QP4 Project
+Project directory and LaTeX documents for Xuan Li UBC STAT 548 Qualifying Paper report 4. Qualifying Paper is on [Variable selection when estimating effects in external target populations](https://doi.org/10.1093/aje/kwae048). 
 
 
 ## Details on directory usage
