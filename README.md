@@ -1,5 +1,5 @@
 # QP4 Project
-Project directory and LaTeX documents for Xuan Li UBC STAT 548 Qualifying Paper report 5. Qualifying Paper chosen is [Multiple Imputation: A Review of Practical and Theoretical Findings](https://arxiv.org/abs/1801.04058). 
+Project directory and LaTeX documents for Xuan Li UBC STAT 548 Qualifying Paper report 4. Qualifying Paper is on [Variable selection when estimating effects in external target populations](https://doi.org/10.1093/aje/kwae048). 
 
 
 ## Details on directory usage
